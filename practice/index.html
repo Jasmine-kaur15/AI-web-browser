@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sahayak AI - Interactive Browser Practice Sandbox (Phase 3)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px 80px 16px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    p.subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Tab Switcher for different Form Architectures */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      background: #090d16;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: #1e293b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .instructions {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      margin-top: 6px;
+    }
+
+    .instructions li {
+      margin-bottom: 3px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    label span.required {
+      color: var(--danger);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #fff;
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 75px;
+    }
+
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text);
+      user-select: none;
+    }
+
+    .options-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .sensitive-box {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 8px;
+    }
+
+    .sensitive-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #f87171;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: #334155;
+      color: #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background: #475569;
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f172a;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .event-log-container {
+      margin-top: 24px;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .event-log-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #log-list {
+      list-style: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      color: #38bdf8;
+      max-height: 160px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 3px;
+    }
+
+    .log-item {
+      padding: 3px 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .log-time {
+      color: var(--text-muted);
+    }
+
+    /* Stepper Wizard Styles */
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: var(--border);
+      z-index: 1;
+    }
+    .step-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: var(--card-bg);
+      padding: 0 10px;
+    }
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #0f172a;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+    .step-item.active .step-circle {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0f172a;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+    .step-item.completed .step-circle {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+    .step-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .step-item.active .step-text {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* GitHub SPA Styles */
+    .gh-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .gh-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .gh-state-badge {
+      background: #238636;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .gh-subtabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .gh-subtab {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .gh-subtab.active {
+      color: #fff;
+      border-bottom-color: #f78166;
+    }
+    .gh-comment-box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0d1117;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .gh-comment-header {
+      background: #161b22;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gh-comment-body {
+      padding: 14px;
+      font-size: 13.5px;
+      color: #e6edf3;
+      line-height: 1.6;
+    }
+    .gh-reaction-bar {
+      padding: 6px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 6px;
+      background: #161b22;
+    }
+    .gh-reaction-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .gh-reaction-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">MILESTONE 4.5 END-TO-END VERIFICATION ENVIRONMENT</div>
+      <h1>Sahayak AI Browser Action Practice Sandbox</h1>
+      <p class="subtitle">Cross-site testing testbed for Set-of-Marks badge overlays, HITL action planning, multi-step wizards, SPA navigation, and safety sandbox.</p>
+    </header>
+
+    <!-- Tab Navigation -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-travel-btn" onclick="switchForm('travel')">✈️ Flight & Travel</button>
+      <button class="tab-btn" id="tab-w3c-btn" onclick="switchForm('w3c')">📝 W3Schools Forms</button>
+      <button class="tab-btn" id="tab-survey-btn" onclick="switchForm('survey')">📋 Customer Survey</button>
+      <button class="tab-btn" id="tab-wizard-btn" onclick="switchForm('wizard')">🧙 Multi-Step Wizard</button>
+      <button class="tab-btn" id="tab-spa-btn" onclick="switchForm('spa')">🐙 GitHub SPA Sandbox</button>
+    </div>
+
+    <div class="instructions">
+      <strong>How to test with Sahayak:</strong>
+      <ol>
+        <li>Open Sahayak in the Chrome Side Panel and switch to the <strong>Actions</strong> tab.</li>
+        <li>Enter your goal (e.g., <em>"Fill passenger name as Rohan Mehra and select Business Class"</em> or <em>"Choose Volvo and select Bike"</em>).</li>
+        <li>Click <strong>Scan & Plan</strong> $\rightarrow$ observe numbered yellow badges (<code>#1</code>, <code>#2</code>...) overlaid on every interactive field.</li>
+        <li>Review proposed actions in the <strong>HITL Approval Card</strong> and press <strong>Enter</strong> to run! Watch the auto-advancing multi-step loop.</li>
+      </ol>
+    </div>
+
+    <!-- FORM 1: Travel & Flight Booking -->
+    <form id="form-travel" onsubmit="event.preventDefault(); handleFormSubmit('Flight Booking');">
+      <div class="card">
+        <h2>👤 Passenger Details</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="traveler-name">Full Name <span class="required">*</span></label>
+            <input type="text" id="traveler-name" name="full_name" placeholder="e.g. Rohan Mehra" required />
+          </div>
+
+          <div class="form-group">
+            <label for="traveler-email">Email Address <span class="required">*</span></label>
+            <input type="email" id="traveler-email" name="email" placeholder="rohan@example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="travel-destination">Destination City <span class="required">*</span></label>
+            <input type="text" id="travel-destination" name="destination" placeholder="e.g. Goa, Mumbai, Delhi" required />
+          </div>
+
+          <div class="form-group">
+            <label for="travel-date">Departure Date</label>
+            <input type="date" id="travel-date" name="departure_date" />
+          </div>
+
+          <div class="form-group">
+            <label for="travel-class">Cabin Class</label>
+            <select id="travel-class" name="travel_class">
+              <option value="economy">Economy Class</option>
+              <option value="premium">Premium Economy</option>
+              <option value="business">Business Class</option>
+              <option value="first">First Class</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="travelers-count">Number of Guests</label>
+            <select id="travelers-count" name="guests_count">
+              <option value="1">1 Adult</option>
+              <option value="2">2 Adults</option>
+              <option value="3">3 Adults</option>
+              <option value="4">4+ Adults</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="special-requests">Special Requests / Dietary Needs</label>
+            <textarea id="special-requests" name="special_requests" placeholder="e.g. Vegetarian meal, window seat preference..."></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="checkbox-group">
+              <input type="checkbox" id="agree-terms" name="agree_terms" />
+              <span>I agree to the airline terms of carriage and cancellation policy</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Protected Payment & Security -->
+      <div class="card">
+        <h2>🔒 Security & Payment Verification</h2>
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px;">
+          Sahayak strictly scrubs passwords, OTPs, and credit card numbers from its action map and blocks automated input for your protection.
+        </p>
+
+        <div class="sensitive-box">
+          <div class="sensitive-title">🛡️ High-Security Credentials (Automated input blocked)</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="account-password">Account Password</label>
+              <input type="password" id="account-password" name="user_password" placeholder="••••••••••••" />
+            </div>
+
+            <div class="form-group">
+              <label for="card-number">Credit Card Number</label>
+              <input type="text" id="card-number" name="creditcard_number" placeholder="4532 •••• •••• 8892" autocomplete="cc-number" />
+            </div>
+
+            <div class="form-group">
+              <label for="security-otp">One-Time Password (OTP)</label>
+              <input type="text" id="security-otp" name="two_factor_otp" placeholder="6-digit code" autocomplete="one-time-code" />
+            </div>
+          </div>
+        </div>
+
+        <div class="actions-bar">
+          <button type="button" class="btn btn-secondary" onclick="resetCurrentForm()">Reset Form</button>
+          <button type="button" class="btn btn-primary" onclick="logEvent('Search Flights Clicked')">Search Flights</button>
+          <button type="submit" class="btn btn-danger" id="book-flight-btn">Book Flight & Pay</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- FORM 2: W3Schools Classic HTML Form Test -->
+    <form id="form-w3c" style="display: none;" onsubmit="event.preventDefault(); handleFormSubmit('W3Schools Form');">
+      <div class="card">
+        <h2>📝 W3Schools Standard HTML Form Elements</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fname">First name:</label>
+            <input type="text" id="fname" name="fname" value="John" />
+          </div>
+
+          <div class="form-group">
+            <label for="lname">Last name:</label>
+            <input type="text" id="lname" name="lname" value="Doe" />
+          </div>
+
+          <div class="form-group full-width">
+            <label>Gender:</label>
+            <div class="options-row">
+              <label class="radio-group">
+                <input type="radio" id="gender-male" name="gender" value="male" checked />
+                <span>Male</span>
+              </label>
+              <label class="radio-group">
+                <input type="radio" id="gender-female" name="gender" value="female" />
+                <span>Female</span>
+              </label>
+              <label class="radio-group">
+                <input type="radio" id="gender-other" name="gender" value="other" />
+                <span>Other</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Select your vehicles:</label>
+            <div class="options-row">
+              <label class="checkbox-group">
+                <input type="checkbox" id="vehicle1" name="vehicle" value="Bike" />
+                <span>I have a bike</span>
+              </label>
+              <label class="checkbox-group">
+                <input type="checkbox" id="vehicle2" name="vehicle" value="Car" checked />
+                <span>I have a car</span>
+              </label>
+              <label class="checkbox-group">
+                <input type="checkbox" id="vehicle3" name="vehicle" value="Boat" />
+                <span>I have a boat</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cars">Choose a car:</label>
+            <select id="cars" name="cars">
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+              <option value="mercedes">Mercedes</option>
+              <option value="audi">Audi</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="message">Comments / Notes:</label>
+            <textarea id="message" name="message" placeholder="Type your comment here..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions-bar">
+          <button type="reset" class="btn btn-secondary">Reset</button>
+          <button type="submit" class="btn btn-primary" id="w3c-submit-btn">Submit W3C Form</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- FORM 3: Google Forms / Multi-Section Survey -->
+    <form id="form-survey" style="display: none;" onsubmit="event.preventDefault(); handleFormSubmit('Customer Survey');">
+      <div class="card">
+        <h2>📋 Customer Experience Feedback Survey</h2>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="form-group">
+            <label for="survey-name">Your Full Name <span class="required">*</span></label>
+            <input type="text" id="survey-name" name="respondent_name" placeholder="Name" required />
+          </div>
+
+          <div class="form-group">
+            <label>How satisfied are you with your AI Browser Agent experience? (1 = Poor, 5 = Excellent)</label>
+            <div class="options-row">
+              <label class="radio-group"><input type="radio" name="rating" value="1" /> 1 (Poor)</label>
+              <label class="radio-group"><input type="radio" name="rating" value="2" /> 2</label>
+              <label class="radio-group"><input type="radio" name="rating" value="3" /> 3</label>
+              <label class="radio-group"><input type="radio" name="rating" value="4" /> 4</label>
+              <label class="radio-group"><input type="radio" name="rating" value="5" checked /> 5 (Excellent)</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Which features do you find most valuable?</label>
+            <div class="options-row">
+              <label class="checkbox-group"><input type="checkbox" name="fav_features" value="grounded_chat" checked /> Grounded Chat</label>
+              <label class="checkbox-group"><input type="checkbox" name="fav_features" value="som_badging" checked /> Set-of-Marks Badges</label>
+              <label class="checkbox-group"><input type="checkbox" name="fav_features" value="hitl_approval" checked /> HITL Approval Cards</label>
+              <label class="checkbox-group"><input type="checkbox" name="fav_features" value="multimodal_vision" /> Vision Reasoning</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="survey-suggestions">Suggestions for next features:</label>
+            <textarea id="survey-suggestions" name="suggestions" placeholder="Tell us what you'd like to see next..."></textarea>
+          </div>
+        </div>
+
+        <div class="actions-bar">
+          <button type="button" class="btn btn-secondary" onclick="resetCurrentForm()">Clear Form</button>
+          <button type="submit" class="btn btn-primary" id="survey-submit-btn">Submit Response</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- FORM 4: Multi-Step Questionnaire Wizard -->
+    <div id="form-wizard" style="display: none;">
+      <div class="card">
+        <h2>🧙 Multi-Step Registration Wizard</h2>
+
+        <!-- Progress Stepper -->
+        <div class="stepper">
+          <div class="step-item active" id="step-node-1">
+            <div class="step-circle">1</div>
+            <div class="step-text">Account</div>
+          </div>
+          <div class="step-item" id="step-node-2">
+            <div class="step-circle">2</div>
+            <div class="step-text">Profile</div>
+          </div>
+          <div class="step-item" id="step-node-3">
+            <div class="step-circle">3</div>
+            <div class="step-text">Review</div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 1: Account -->
+        <div id="wizard-step-1" class="wizard-panel">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="wiz-username">Username <span class="required">*</span></label>
+              <input type="text" id="wiz-username" name="username" placeholder="e.g. dev_johndoe" required />
+            </div>
+            <div class="form-group">
+              <label for="wiz-email">Work Email <span class="required">*</span></label>
+              <input type="email" id="wiz-email" name="email" placeholder="john@company.com" required />
+            </div>
+            <div class="form-group full-width">
+              <label for="wiz-tier">Subscription Tier</label>
+              <select id="wiz-tier" name="account_tier">
+                <option value="developer">Developer Edition (Free)</option>
+                <option value="pro">Pro Workspace ($12/mo)</option>
+                <option value="enterprise">Enterprise Cloud</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions-bar">
+            <button type="button" class="btn btn-secondary" onclick="resetCurrentForm()">Reset</button>
+            <button type="button" class="btn btn-primary" id="wiz-next-1" onclick="goToWizardStep(2)">Next: Profile ➔</button>
+          </div>
+        </div>
+
+        <!-- Wizard Step 2: Personal Profile (Ideal for Profile Vault Testing) -->
+        <div id="wizard-step-2" class="wizard-panel" style="display: none;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="wiz-fullname">Full Name <span class="required">*</span></label>
+              <input type="text" id="wiz-fullname" name="full_name" placeholder="John Doe" required />
+            </div>
+            <div class="form-group">
+              <label for="wiz-phone">Phone Number</label>
+              <input type="text" id="wiz-phone" name="phone" placeholder="+1 (555) 234-5678" />
+            </div>
+            <div class="form-group">
+              <label for="wiz-city">City</label>
+              <input type="text" id="wiz-city" name="city" placeholder="San Francisco" />
+            </div>
+            <div class="form-group">
+              <label for="wiz-country">Country</label>
+              <input type="text" id="wiz-country" name="country" placeholder="United States" />
+            </div>
+            <div class="form-group full-width">
+              <label for="wiz-linkedin">LinkedIn Profile URL</label>
+              <input type="text" id="wiz-linkedin" name="linkedin" placeholder="https://linkedin.com/in/johndoe" />
+            </div>
+          </div>
+          <div class="actions-bar">
+            <button type="button" class="btn btn-secondary" id="wiz-back-2" onclick="goToWizardStep(1)">⬅ Back</button>
+            <button type="button" class="btn btn-primary" id="wiz-next-2" onclick="goToWizardStep(3)">Next: Review ➔</button>
+          </div>
+        </div>
+
+        <!-- Wizard Step 3: Preferences & Confirmation -->
+        <div id="wizard-step-3" class="wizard-panel" style="display: none;">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Communication Preferences:</label>
+              <div class="options-row">
+                <label class="checkbox-group">
+                  <input type="checkbox" id="wiz-pref-weekly" name="pref_weekly" checked />
+                  <span>Receive weekly AI digest</span>
+                </label>
+                <label class="checkbox-group">
+                  <input type="checkbox" id="wiz-pref-updates" name="pref_updates" checked />
+                  <span>Product releases and security advisories</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label for="wiz-notes">Deployment Notes / Intentions:</label>
+              <textarea id="wiz-notes" name="deployment_notes" placeholder="Tell us how you intend to use Sahayak in your organization..."></textarea>
+            </div>
+          </div>
+          <div class="actions-bar">
+            <button type="button" class="btn btn-secondary" id="wiz-back-3" onclick="goToWizardStep(2)">⬅ Back</button>
+            <button type="button" class="btn btn-primary" id="wiz-finish-btn" onclick="finishWizard()">Complete Wizard 🚀</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTAINER 5: GitHub Issue SPA Sandbox -->
+    <div id="form-spa" style="display: none;">
+      <div class="card">
+        <div class="gh-header">
+          <div class="gh-title">
+            <span>Fix Manifest V3 Service Worker Dormancy in Background Script</span>
+            <span style="color: var(--text-muted); font-weight: 400;">#42</span>
+          </div>
+          <span class="gh-state-badge">Open</span>
+        </div>
+
+        <!-- SPA Sub-tab Navigation (Dynamic DOM switching) -->
+        <div class="gh-subtabs">
+          <button class="gh-subtab active" id="gh-tab-conv" onclick="switchGhTab('conv')">💬 Conversation (3)</button>
+          <button class="gh-subtab" id="gh-tab-commits" onclick="switchGhTab('commits')">🔀 Commits (2)</button>
+          <button class="gh-subtab" id="gh-tab-files" onclick="switchGhTab('files')">📁 Files Changed (4)</button>
+        </div>
+
+        <!-- GitHub Conversation View -->
+        <div id="gh-view-conv">
+          <!-- Comment 1 -->
+          <div class="gh-comment-box">
+            <div class="gh-comment-header">
+              <span><strong>octocat</strong> opened this issue 2 days ago</span>
+              <span class="badge" style="margin: 0; padding: 2px 8px; font-size: 11px;">Author</span>
+            </div>
+            <div class="gh-comment-body">
+              <p>Under Chrome Manifest V3, background service workers terminate after 30 seconds of inactivity. We need persistent storage via <code>chrome.storage.session</code> to retain active task states.</p>
+            </div>
+            <div class="gh-reaction-bar">
+              <button class="gh-reaction-btn" onclick="handleReaction(this, '👍')">👍 4</button>
+              <button class="gh-reaction-btn" onclick="handleReaction(this, '❤️')">❤️ 2</button>
+              <button class="gh-reaction-btn" onclick="handleReaction(this, '🚀')">🚀 5</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Comments List -->
+          <div id="gh-dynamic-comments"></div>
+
+          <!-- New Comment Editor -->
+          <div class="gh-comment-box" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div class="gh-comment-header">
+              <span><strong>Add a comment</strong></span>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 11px;" id="gh-editor-write-btn" onclick="toggleGhEditorMode('write')">Write</button>
+                <button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 11px;" id="gh-editor-preview-btn" onclick="toggleGhEditorMode('preview')">Preview</button>
+              </div>
+            </div>
+            <div style="padding: 12px;">
+              <textarea id="gh-comment-input" placeholder="Leave a constructive comment or proposed solution..." style="min-height: 85px;"></textarea>
+              <div id="gh-comment-preview" style="display: none; padding: 10px; background: #090d16; border-radius: 6px; font-size: 13px; color: #cbd5e1; min-height: 85px;"></div>
+            </div>
+            <div class="actions-bar" style="margin-top: 0; padding: 10px 14px; background: #161b22;">
+              <button type="button" class="btn btn-secondary" onclick="document.getElementById('gh-comment-input').value = ''">Cancel</button>
+              <button type="button" class="btn btn-primary" id="gh-submit-comment-btn" onclick="submitGhComment()">Comment</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- GitHub Commits View -->
+        <div id="gh-view-commits" style="display: none; padding: 14px; background: #090d16; border-radius: 8px; border: 1px solid var(--border);">
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+            <li>🔹 <code>9f3a12b</code> feat: Implement lifecycle storage persistence across dormancy</li>
+            <li>🔹 <code>c72e408</code> fix: Hook HTML5 history API for SPA route transition</li>
+          </ul>
+        </div>
+
+        <!-- GitHub Files Changed View -->
+        <div id="gh-view-files" style="display: none; padding: 14px; background: #090d16; border-radius: 8px; border: 1px solid var(--border);">
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+            <li>📄 <code>src/background/lifecycle.ts</code> (+85, -0)</li>
+            <li>📄 <code>src/content/index.ts</code> (+45, -12)</li>
+            <li>📄 <code>src/sidepanel/components/RateLimitBanner.tsx</code> (+92, -0)</li>
+            <li>📄 <code>scripts/test-phase4.mjs</code> (+120, -0)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real-time Event Logger for debugging -->
+    <div class="event-log-container">
+      <div class="event-log-title">
+        <span>⚡ Real-Time DOM Event Stream</span>
+        <span onclick="document.getElementById('log-list').innerHTML=''" style="cursor: pointer; color: var(--text-muted);">Clear Log</span>
+      </div>
+      <ul id="log-list">
+        <li class="log-item"><span class="log-time">[Ready]</span> Sandbox initialized. Waiting for user or Sahayak actions...</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let activeFormId = 'travel';
+    let currentWizardStep = 1;
+
+    function switchForm(type) {
+      activeFormId = type;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('form, #form-wizard, #form-spa').forEach(f => f.style.display = 'none');
+
+      if (type === 'travel') {
+        document.getElementById('tab-travel-btn').classList.add('active');
+        document.getElementById('form-travel').style.display = 'block';
+        logEvent('Switched to Flight & Travel form.');
+      } else if (type === 'w3c') {
+        document.getElementById('tab-w3c-btn').classList.add('active');
+        document.getElementById('form-w3c').style.display = 'block';
+        logEvent('Switched to W3Schools HTML Forms test.');
+      } else if (type === 'survey') {
+        document.getElementById('tab-survey-btn').classList.add('active');
+        document.getElementById('form-survey').style.display = 'block';
+        logEvent('Switched to Google Forms / Survey test.');
+      } else if (type === 'wizard') {
+        document.getElementById('tab-wizard-btn').classList.add('active');
+        document.getElementById('form-wizard').style.display = 'block';
+        goToWizardStep(currentWizardStep);
+        logEvent('Switched to Multi-Step Questionnaire Wizard.');
+      } else if (type === 'spa') {
+        document.getElementById('tab-spa-btn').classList.add('active');
+        document.getElementById('form-spa').style.display = 'block';
+        logEvent('Switched to GitHub Issue SPA Sandbox.');
+      }
+    }
+
+    function goToWizardStep(step) {
+      currentWizardStep = step;
+      document.querySelectorAll('.wizard-panel').forEach(p => p.style.display = 'none');
+      const targetPanel = document.getElementById(`wizard-step-${step}`);
+      if (targetPanel) targetPanel.style.display = 'block';
+
+      // Update stepper nodes
+      for (let i = 1; i <= 3; i++) {
+        const node = document.getElementById(`step-node-${i}`);
+        if (!node) continue;
+        node.classList.remove('active', 'completed');
+        if (i < step) {
+          node.classList.add('completed');
+        } else if (i === step) {
+          node.classList.add('active');
+        }
+      }
+      logEvent(`Wizard transitioned to Step ${step} of 3.`);
+    }
+
+    function finishWizard() {
+      logEvent('🚀 WIZARD COMPLETED: User finalized registration flow.');
+      alert('Wizard completed successfully! Profile saved.');
+    }
+
+    function switchGhTab(tab) {
+      document.querySelectorAll('.gh-subtab').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`gh-tab-${tab}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('gh-view-conv').style.display = tab === 'conv' ? 'block' : 'none';
+      document.getElementById('gh-view-commits').style.display = tab === 'commits' ? 'block' : 'none';
+      document.getElementById('gh-view-files').style.display = tab === 'files' ? 'block' : 'none';
+      logEvent(`GitHub SPA route switched to tab: [${tab.toUpperCase()}]`);
+    }
+
+    function toggleGhEditorMode(mode) {
+      const input = document.getElementById('gh-comment-input');
+      const preview = document.getElementById('gh-comment-preview');
+      const writeBtn = document.getElementById('gh-editor-write-btn');
+      const prevBtn = document.getElementById('gh-editor-preview-btn');
+
+      if (mode === 'preview') {
+        preview.textContent = input.value || 'Nothing to preview.';
+        preview.style.display = 'block';
+        input.style.display = 'none';
+        prevBtn.classList.add('btn-primary');
+        prevBtn.classList.remove('btn-secondary');
+        writeBtn.classList.add('btn-secondary');
+        writeBtn.classList.remove('btn-primary');
+      } else {
+        preview.style.display = 'none';
+        input.style.display = 'block';
+        writeBtn.classList.add('btn-primary');
+        writeBtn.classList.remove('btn-secondary');
+        prevBtn.classList.add('btn-secondary');
+        prevBtn.classList.remove('btn-primary');
+      }
+    }
+
+    function submitGhComment() {
+      const input = document.getElementById('gh-comment-input');
+      const val = (input.value || '').trim();
+      if (!val) {
+        alert('Please enter a comment.');
+        return;
+      }
+
+      const list = document.getElementById('gh-dynamic-comments');
+      const box = document.createElement('div');
+      box.className = 'gh-comment-box';
+      box.innerHTML = `
+        <div class="gh-comment-header">
+          <span><strong>sahayak-agent</strong> commented just now</span>
+          <span class="badge" style="margin: 0; padding: 2px 8px; font-size: 11px;">Collaborator</span>
+        </div>
+        <div class="gh-comment-body">
+          <p>${val.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+        </div>
+        <div class="gh-reaction-bar">
+          <button class="gh-reaction-btn" onclick="handleReaction(this, '👍')">👍 1</button>
+          <button class="gh-reaction-btn" onclick="handleReaction(this, '🚀')">🚀 1</button>
+        </div>
+      `;
+      list.appendChild(box);
+      input.value = '';
+      toggleGhEditorMode('write');
+      logEvent(`GitHub SPA: New comment posted (${val.length} chars).`);
+    }
+
+    function handleReaction(btn, emoji) {
+      const parts = btn.innerText.split(' ');
+      const count = parseInt(parts[1] || '0', 10) + 1;
+      btn.innerText = `${emoji} ${count}`;
+      logEvent(`GitHub SPA Reaction added: ${emoji}`);
+    }
+
+    function logEvent(msg) {
+      const list = document.getElementById('log-list');
+      const item = document.createElement('li');
+      item.className = 'log-item';
+      const now = new Date().toTimeString().split(' ')[0];
+      item.innerHTML = `<span class="log-time">[${now}]</span> ${msg}`;
+      list.appendChild(item);
+    }
+
+    // Monitor input changes across all inputs
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('input', (e) => {
+        if (el.type === 'password' || (el.name && (el.name.includes('creditcard') || el.name.includes('otp')))) return;
+        logEvent(`Input "${el.name || el.id}": "${e.target.value}"`);
+      });
+      el.addEventListener('change', (e) => {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          logEvent(`Change "${el.name}": "${el.value}" (checked: ${el.checked})`);
+        } else {
+          logEvent(`Change "${el.name || el.id}": "${e.target.value}"`);
+        }
+      });
+    });
+
+    function handleFormSubmit(formName) {
+      logEvent(`🚀 FORM SUBMITTED: ${formName}`);
+      alert(`Submission successful for: ${formName}!`);
+    }
+
+    function resetCurrentForm() {
+      const current = document.getElementById(`form-${activeFormId}`);
+      if (current && typeof current.reset === 'function') current.reset();
+      logEvent(`Form "${activeFormId}" reset.`);
+    }
+  </script>
+</body>
+</html>

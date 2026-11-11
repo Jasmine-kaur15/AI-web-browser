@@ -1,0 +1,42 @@
+[
+  {
+    "id": "tldr-action-items",
+    "title": "TL;DR & 3 Action Items",
+    "description": "Generates a punchy 3-bullet summary with actionable takeaways.",
+    "prompt": "Provide a well-explained summary of this page followed by 3 thoroughly detailed, actionable takeaways with bold headings and complete explanatory sentences (no single-word bullets).",
+    "category": "summary",
+    "isBuiltin": true
+  },
+  {
+    "id": "fact-check",
+    "title": "Fact Check Page",
+    "description": "Highlights key factual claims and flags potential ambiguities, unsupported assertions, or unverified points.",
+    "prompt": "Identify the top 5 factual assertions made in this content. Evaluate whether adequate sources or evidence are provided on this page, and flag any potential biases or claims that require external verification.",
+    "category": "summary",
+    "isBuiltin": true
+  },
+  {
+    "id": "fill-practice-form",
+    "title": "Fill Form with Profile",
+    "description": "Scans interactive inputs on the active page and fills them using your local Profile Vault data.",
+    "prompt": "Fill out this form using the information stored in my profile vault. Match fields like my name, email, phone, location, and social links.",
+    "category": "action",
+    "isBuiltin": true
+  },
+  {
+    "id": "hinglish-explainer",
+    "title": "Hinglish Explainer",
+    "description": "Simplifies complex academic or legal text into everyday conversational Hinglish.",
+    "prompt": "Explain the core message of this page in everyday conversational Hinglish (Roman/Latin script). Break down technical jargon into simple everyday examples.",
+    "category": "translate",
+    "isBuiltin": true
+  },
+  {
+    "id": "draft-thoughtful-reply",
+    "title": "Draft Thoughtful Reply",
+    "description": "Drafts a constructive, professional comment or reply based on the page content.",
+    "prompt": "Draft a thoughtful, constructive reply to the highlighted topic, keeping a respectful and professional tone.",
+    "category": "draft",
+    "isBuiltin": true
+  }
+]

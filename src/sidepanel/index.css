@@ -1,0 +1,292 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Sahayak Modern Design Tokens (Responsive Dark/Light Theme System)
+   ========================================================================== */
+
+:root,
+[data-theme="dark"] {
+  /* Surface & Backgrounds */
+  --bg-primary: #0f172a;               /* Deep slate canvas */
+  --bg-secondary: #1e293b;             /* Layer 1 cards & surfaces */
+  --bg-tertiary: #0b1120;              /* Layer 2 inputs & recesses */
+  --bg-card: rgba(30, 41, 59, 0.75);   /* Translucent cards */
+  --bg-card-hover: rgba(51, 65, 85, 0.8);
+  --bg-glass: rgba(15, 23, 42, 0.88);  /* Glassmorphic header/tabs */
+
+  /* Borders & Dividers */
+  --border-color: #334155;             /* Subtle borders */
+  --border-muted: #1e293b;
+  --border-focus: #38bdf8;             /* Focused inputs */
+
+  /* Text & Typography */
+  --text-primary: #f8fafc;             /* High contrast headers & text */
+  --text-secondary: #94a3b8;           /* Muted body text */
+  --text-muted: #64748b;               /* Subtle captions & timestamps */
+
+  /* Primary Brand & Accents */
+  --accent-cyan: #38bdf8;              /* Sahayak Primary Cyan Accent */
+  --accent-blue: #0284c7;              /* Deep Sky Blue */
+  --accent-emerald: #10b981;           /* Active status & approval */
+  --accent-amber: #f59e0b;             /* Busy / Thinking state */
+  --accent-rose: #f43f5e;              /* Stop / Error state */
+  --accent-purple: #818cf8;
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 16px rgba(56, 189, 248, 0.25);
+
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: rgba(241, 245, 249, 0.95);
+  --bg-glass: rgba(248, 250, 252, 0.92);
+
+  --border-color: #cbd5e1;
+  --border-muted: #e2e8f0;
+  --border-focus: #0284c7;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  --accent-cyan: #0284c7;
+  --accent-blue: #2563eb;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+  --accent-purple: #6366f1;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 16px rgba(2, 132, 199, 0.15);
+}
+
+/* ==========================================================================
+   Global Reset & Responsive Viewport Rules (Strict 320px Chrome Min-Width)
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  min-width: 320px;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--bg-primary);
+}
+
+/* Slim modern scrollbars - non-intrusive */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ==========================================================================
+   Glassmorphism & Component Tokens
+   ========================================================================== */
+
+.glass-header {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+}
+
+.glass-pill {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+}
+
+/* Interactive Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #334155;
+  border-color: #475569;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Input Fields */
+.input-field {
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-field:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 1px var(--border-focus);
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Milestone 2.6: Markdown UI Polish, Animations & Shimmer Skeletons
+   ========================================================================== */
+
+/* Smooth Message Entry Micro-Animation */
+@keyframes messageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-enter {
+  animation: messageEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Shimmer Loading Skeleton */
+@keyframes shimmerAnimation {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(51, 65, 85, 0.45) 0%,
+    rgba(100, 116, 139, 0.75) 50%,
+    rgba(51, 65, 85, 0.45) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerAnimation 1.6s infinite ease-in-out;
+}
+
+/* Responsive code blocks and tables to prevent horizontal layout overflow */
+pre, table, .markdown-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom slim scrollbar for code containers */
+pre::-webkit-scrollbar,
+table::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+pre::-webkit-scrollbar-thumb,
+table::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
